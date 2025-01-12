@@ -1,0 +1,79 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ip-lookup
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: ip-lookup
+    repoURL: https://chrisleekr.github.io/helm-charts
+    targetRevision: 0.1.4
+    helm:
+      parameters:
+        - name: "ingress.hosts[0].host"
+          value: "INGRESS_HOST_PLACEHOLDER"
+        - name: "ingress.tls[0].hosts[0]"
+          value: "INGRESS_HOST_PLACEHOLDER"
+        - name: "image.tag"
+          value: "1.0.0"
+      values: |
+        replicaCount: 1
+
+        image:
+          repository: chrisleekr/ip-lookup
+          pullPolicy: Always
+
+        service:
+          type: ClusterIP
+          port: 3000
+
+        ingress:
+          enabled: true
+          className: "nginx"
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+            kubernetes.io/ingress.class: nginx
+            nginx.ingress.kubernetes.io/enable-cors: "true"
+            nginx.ingress.kubernetes.io/cors-allow-methods: "GET, OPTIONS"
+            nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+            nginx.ingress.kubernetes.io/add-base-url: "true"
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
+            nginx.ingress.kubernetes.io/proxy-body-size: "1m"
+            nginx.ingress.kubernetes.io/frame-options: DENY
+            nginx.ingress.kubernetes.io/x-content-type-options: nosniff
+          hosts:
+            - host: "INGRESS_HOST_PLACEHOLDER"
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - secretName: ip-lookup-tls
+              hosts:
+                - INGRESS_HOST_PLACEHOLDER
+
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+
+        env:
+          - name: IPINFO_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: ip-lookup-secret
+                key: ipinfo-token
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ip-lookup
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

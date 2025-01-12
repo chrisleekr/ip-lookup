@@ -2,6 +2,12 @@
 
 A TypeScript-based service that provides comprehensive IP address information using Fastify, MaxMind GeoLite2 databases, and IPInfo API, with a focus on identifying privacy networks.
 
+[![CI](https://github.com/chrisleekr/ip-lookup/actions/workflows/ci.yml/badge.svg)](https://github.com/chrisleekr/ip-lookup/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/chrisleekr/ip-lookup/branch/main/graph/badge.svg)](https://codecov.io/gh/chrisleekr/ip-lookup)
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/chrisleekr/ip-lookup?sort=semver)](https://hub.docker.com/r/chrisleekr/ip-lookup)
+[![Docker Pulls](https://img.shields.io/docker/pulls/chrisleekr/ip-lookup)](https://hub.docker.com/r/chrisleekr/ip-lookup)
+[![MIT License](https://img.shields.io/github/license/chrisleekr/ip-lookup)](https://github.com/chrisleekr/ip-lookup/blob/main/LICENSE)
+
 ## Features
 
 - Health check endpoint
@@ -319,12 +325,12 @@ curl "http://localhost:3000/api/v1/ip-lookup?ip=104.28.125.3"
 1. Create a Github Actions secret:
    - Go to Settings > Secrets and variables > Actions
    - Add new secret:
-      - Name: DOCKERHUB_TOKEN
-        Value: (the token you just created)
-      - Name: DOCKERHUB_USERNAME
-        Value: (your Docker Hub username)
-      - Name: CODECOV_TOKEN
-        Value: (your Codecov token)
+     - Name: DOCKERHUB_TOKEN
+       Value: (the token you just created)
+     - Name: DOCKERHUB_USERNAME
+       Value: (your Docker Hub username)
+     - Name: CODECOV_TOKEN
+       Value: (your Codecov token)
 2. Create a Personal Access Token for Release Please:
    - Go to Settings > Developer settings > Personal access tokens
    - Create a new Fine-grained token with:
@@ -342,3 +348,65 @@ curl "http://localhost:3000/api/v1/ip-lookup?ip=104.28.125.3"
    - Add new secret:
      - Name: RELEASE_PLEASE_TOKEN
      - Value: (the token you just created)
+
+### ArgoCD
+
+The application can be deployed using ArgoCD. The configuration files are located in the `argocd` directory:
+
+- `argocd-app.yaml`: ArgoCD Application manifest with Helm values
+- `argocd-secret.yaml`: Secrets configuration
+
+1. Add the Helm repository to ArgoCD:
+
+   ```bash
+   argocd repo add https://chrisleekr.github.io/helm-charts --type helm --name chrisleekr
+   ```
+
+2. Create the namespace:
+
+   ```bash
+   kubectl create namespace ip-lookup
+   ```
+
+3. Create the secret with your IPInfo token:
+
+   ```bash
+   # Option 1: Using kubectl create secret
+   kubectl create secret generic ip-lookup-secret -n ip-lookup \
+     --from-literal=ipinfo-token=your-actual-token-here
+
+   # Option 2: Using the secret manifest
+   export IPINFO_TOKEN=your-actual-token-here
+   cat argocd/argocd-secret.yaml | sed "s/ipinfo-token:.*/ipinfo-token: $IPINFO_TOKEN/" | kubectl apply -f -
+   ```
+
+4. Deploy the application with your domain:
+
+   ```bash
+   # Set your domain
+   export INGRESS_HOST=ip-lookup.your-domain.com
+
+   # Apply the ArgoCD application with the domain substituted
+   cat argocd/argocd-app.yaml | \
+     sed "s/INGRESS_HOST_PLACEHOLDER/$INGRESS_HOST/g" | \
+     kubectl apply -f -
+   ```
+
+5. Check the deployment status:
+
+   ```bash
+   argocd app get ip-lookup
+   ```
+
+6. Sync the application if needed:
+
+   ```bash
+   argocd app sync ip-lookup
+   ```
+
+The application will be deployed to the `ip-lookup` namespace with:
+
+- Ingress configured with HTTPS using Let's Encrypt
+- Automatic syncing enabled
+- Resource limits and health checks configured
+- Security headers and SSL redirect enabled
