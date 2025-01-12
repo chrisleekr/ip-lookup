@@ -120,8 +120,6 @@ jobs:
     runs-on: ubuntu-22.04
     if: "!contains(github.event.head_commit.message, 'chore(main): release')"
     timeout-minutes: 30
-    outputs:
-      image_tag: ${{ steps.meta.outputs.tags }}
     steps:
       - uses: actions/checkout@v4
 
@@ -162,6 +160,8 @@ jobs:
     if: "github.ref != 'refs/heads/main' && !contains(github.event.head_commit.message, 'chore(main): release')"
     timeout-minutes: 20
     steps:
+      - uses: actions/checkout@v4
+
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
