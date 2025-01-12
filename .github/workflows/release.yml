@@ -36,22 +36,6 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-      - name: Debug release-please outputs
-        env:
-          RELEASE_CREATED: ${{ steps.release.outputs.release_created }}
-          RELEASE_TAG_NAME: ${{ steps.release.outputs.release_tag_name }}
-          VERSION: ${{ steps.release.outputs.version }}
-          MAJOR: ${{ steps.release.outputs.major }}
-          MINOR: ${{ steps.release.outputs.minor }}
-          PATCH: ${{ steps.release.outputs.patch }}
-        run: |
-          echo "Release created: $RELEASE_CREATED"
-          echo "Release tag name: $RELEASE_TAG_NAME"
-          echo "Version: $VERSION"
-          echo "Major: $MAJOR"
-          echo "Minor: $MINOR"
-          echo "Patch: $PATCH"
-
   publish-release:
     needs: release-please
     if: |
