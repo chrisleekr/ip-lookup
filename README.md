@@ -313,3 +313,15 @@ curl "http://localhost:3000/api/v1/ip-lookup?ip=104.28.125.3"
      - Type: Variable
      - Protect: No
      - Mask: Yes
+
+### Github Actions
+
+1. Create a Github Actions secret:
+   - Go to Settings > Secrets and variables > Actions
+   - Add new secret:
+      - Name: DOCKERHUB_TOKEN
+        Value: (the token you just created)
+      - Name: DOCKERHUB_USERNAME
+        Value: (your Docker Hub username)
+      - Name: CODECOV_TOKEN
+        Value: (your Codecov token)
