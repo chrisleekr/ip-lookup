@@ -18,8 +18,14 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     outputs:
-      releases_created: ${{ steps.release.outputs.releases_created }}
-      tag_name: ${{ steps.release.outputs.tag_name }}
+      release_created: ${{ steps.release.outputs.release_created }}
+      release_tag_name: ${{ steps.release.outputs.release_tag_name }}
+      upload_url: ${{ steps.release.outputs.upload_url }}
+      html_url: ${{ steps.release.outputs.html_url }}
+      major: ${{ steps.release.outputs.major }}
+      minor: ${{ steps.release.outputs.minor }}
+      patch: ${{ steps.release.outputs.patch }}
+      version: ${{ steps.release.outputs.version }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -27,10 +33,30 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: simple
           default-branch: main
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      - name: Debug release-please outputs
+        env:
+          RELEASE_CREATED: ${{ steps.release.outputs.release_created }}
+          RELEASE_TAG_NAME: ${{ steps.release.outputs.release_tag_name }}
+          VERSION: ${{ steps.release.outputs.version }}
+          MAJOR: ${{ steps.release.outputs.major }}
+          MINOR: ${{ steps.release.outputs.minor }}
+          PATCH: ${{ steps.release.outputs.patch }}
+        run: |
+          echo "Release created: $RELEASE_CREATED"
+          echo "Release tag name: $RELEASE_TAG_NAME"
+          echo "Version: $VERSION"
+          echo "Major: $MAJOR"
+          echo "Minor: $MINOR"
+          echo "Patch: $PATCH"
 
   publish-release:
     needs: release-please
-    if: ${{ needs.release-please.outputs.releases_created }}
+    if: |
+      needs.release-please.outputs.release_created == 'true' &&
+      contains(github.event.head_commit.message, 'chore(main): release')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -51,7 +77,7 @@ jobs:
         with:
           images: ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}
           tags: |
-            type=semver,pattern=v{{version}},value=${{ needs.release-please.outputs.tag_name }}
+            type=semver,pattern={{version}},value=${{ needs.release-please.outputs.version }}
             type=raw,value=latest
 
       - name: Build and push
