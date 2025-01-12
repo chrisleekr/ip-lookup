@@ -140,7 +140,7 @@ jobs:
         with:
           images: ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}
           tags: |
-            type=sha,prefix=pr-,suffix=,format=short
+            type=sha,prefix=dev-,suffix=,format=short
 
       - name: Build and push
         uses: docker/build-push-action@v5
