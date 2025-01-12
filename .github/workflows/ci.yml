@@ -57,10 +57,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        if: needs.prepare.outputs.cache-hit != 'true'
-
-      - name: Run npm run lint
-        run: npm run lint
 
   lint-dockerfile:
     runs-on: ubuntu-22.04
@@ -90,7 +86,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        if: needs.prepare.outputs.cache-hit != 'true'
 
       - name: Run tests
         run: npm run test -- --ci
@@ -116,13 +111,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        if: needs.prepare.outputs.cache-hit != 'true'
 
       - name: Build
         run: npm run build
 
   docker:
-    needs: [build, lint, test]
+    needs: [build, lint, test, lint-dockerfile]
     runs-on: ubuntu-22.04
     if: "!contains(github.event.head_commit.message, 'chore(main): release')"
     timeout-minutes: 30
