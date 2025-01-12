@@ -325,3 +325,20 @@ curl "http://localhost:3000/api/v1/ip-lookup?ip=104.28.125.3"
         Value: (your Docker Hub username)
       - Name: CODECOV_TOKEN
         Value: (your Codecov token)
+2. Create a Personal Access Token for Release Please:
+   - Go to Settings > Developer settings > Personal access tokens
+   - Create a new Fine-grained token with:
+     - Name: Release Please Token
+     - Expiration: 1 year
+     - Repository access: Only selected repositories
+     - Repository: (your repository)
+     - Permissions:
+       - Contents: Read and write
+       - Pull requests: Read and write
+       - Workflows: Read and write
+     - Generate the token
+3. Add the token as a Github Actions secret:
+   - Go to Settings > Secrets and variables > Actions
+   - Add new secret:
+     - Name: RELEASE_PLEASE_TOKEN
+     - Value: (the token you just created)
