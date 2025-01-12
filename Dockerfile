@@ -29,7 +29,9 @@ FROM node:20.11-alpine AS production
 
 # Add labels following OCI image spec
 LABEL org.opencontainers.image.authors="chris@chrislee.kr" \
+  org.opencontainers.image.title=ip-lookup \
   org.opencontainers.image.description="IP Lookup Service" \
+  org.opencontainers.image.vendor="chrislee.kr" \
   org.opencontainers.image.version="${VERSION}" \
   org.opencontainers.image.created=${BUILD_DATE} \
   org.opencontainers.image.revision=${COMMIT_SHA}
