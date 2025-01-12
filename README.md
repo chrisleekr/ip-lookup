@@ -2,6 +2,12 @@
 
 A TypeScript-based service that provides comprehensive IP address information using Fastify, MaxMind GeoLite2 databases, and IPInfo API, with a focus on identifying privacy networks.
 
+[![CI](https://github.com/chrisleekr/ip-lookup/actions/workflows/ci.yml/badge.svg)](https://github.com/chrisleekr/ip-lookup/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/chrisleekr/ip-lookup/branch/main/graph/badge.svg)](https://codecov.io/gh/chrisleekr/ip-lookup)
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/chrisleekr/ip-lookup?sort=semver)](https://hub.docker.com/r/chrisleekr/ip-lookup)
+[![Docker Pulls](https://img.shields.io/docker/pulls/chrisleekr/ip-lookup)](https://hub.docker.com/r/chrisleekr/ip-lookup)
+[![MIT License](https://img.shields.io/github/license/chrisleekr/ip-lookup)](https://github.com/chrisleekr/ip-lookup/blob/main/LICENSE)
+
 ## Features
 
 - Health check endpoint
