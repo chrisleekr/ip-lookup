@@ -2,12 +2,14 @@
   "cSpell.words": [
     "addgroup",
     "adduser",
+    "aquasecurity",
     "BUILDKIT",
     "Buildx",
     "CERTDIR",
     "checkperiod",
     "chrislee",
     "dind",
+    "DOCKERHUB",
     "dotenv",
     "esac",
     "geoip",
@@ -19,6 +21,7 @@
     "mmdb",
     "mockprovider",
     "OPENCOLLECTIVE",
+    "sarif",
     "trivycache"
   ]
 }
