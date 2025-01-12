@@ -1,0 +1,42 @@
+{
+  "ip": "104.28.125.3",
+  "city": "Sydney",
+  "region": "New South Wales",
+  "country": "AU",
+  "loc": "-33.8678,151.2073",
+  "postal": "1001",
+  "timezone": "Australia/Sydney",
+  "asn": {
+    "asn": "AS13335",
+    "name": "Cloudflare, Inc.",
+    "domain": "cloudflare.com",
+    "route": "104.28.125.0/24",
+    "type": "hosting"
+  },
+  "company": {
+    "name": "Cloudflare, Inc.",
+    "domain": "cloudflare.com",
+    "type": "hosting"
+  },
+  "privacy": {
+    "vpn": false,
+    "proxy": false,
+    "tor": false,
+    "relay": true,
+    "hosting": true,
+    "service": "Apple Private Relay"
+  },
+  "abuse": {
+    "address": "US, CA, San Francisco, 101 Townsend Street, 94107",
+    "country": "US",
+    "email": "abuse@cloudflare.com",
+    "name": "Abuse",
+    "network": "104.16.0.0/12",
+    "phone": "+1-650-319-8930"
+  },
+  "domains": {
+    "page": 0,
+    "total": 0,
+    "domains": []
+  }
+}

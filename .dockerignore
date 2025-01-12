@@ -1,0 +1,55 @@
+# Version control
+.git
+.gitignore
+.gitlab-ci.yml
+
+# Dependencies
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.npm
+
+# Build output
+dist
+build
+coverage
+
+# Environment and config
+.env*
+!.env.example
+.editorconfig
+.prettierrc
+.prettierignore
+.eslintrc
+.eslintignore
+.hadolint.yaml
+
+# IDE and OS files
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Test files
+__tests__
+*.test.ts
+jest.config.ts
+coverage
+
+# Documentation
+*.md
+docs
+
+# MaxMind database files
+data/
+*.mmdb
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Misc
+.cursorrules
+.nyc_output

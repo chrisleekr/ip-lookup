@@ -1,0 +1,6 @@
+# Ignore artifacts:
+coverage
+data
+dist
+node_modules
+CHANGELOG.md
